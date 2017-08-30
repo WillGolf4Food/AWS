@@ -14,8 +14,6 @@ public class Sorter {
 		
 		List<Customer> theList = readLines(args[0]);
 		
-		String s = new String ("test");
-		
 		System.out.println ("Original file contents");
 		dump (theList);
 		
