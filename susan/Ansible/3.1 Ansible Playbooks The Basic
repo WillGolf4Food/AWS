@@ -1,0 +1,28 @@
+--Create an inventory in /home/ansible/inventory That Contains a Host Group Named web. The web Group Should Contain node1 and node2
+--Use Vim to create the inventory file:
+[ansible@control1]$ echo "[web]" >> /home/ansible/inventory
+[ansible@control1]$ echo "node1" >> /home/ansible/inventory
+[ansible@control1]$ echo "node2" >> /home/ansible/inventory
+
+--It should contain this when we're done:
+[web]
+node1
+node2
+
+--Create a Playbook in /home/ansible/web.yml
+--Using Vim, we'll create our web.yml file with these contents:
+- hosts: web
+  become: yes
+  tasks:
+    - name: install httpd
+      yum: name=httpd state=latest
+    - name: start and enable httpd
+      service: name=httpd state=started enabled=yes
+    - name: retrieve website from repo
+      get_url: url=http://repo.example.com/website.tgz dest=/tmp/website.tgz
+    - name: install website
+      unarchive: remote_src=yes src=/tmp/website.tgz dest=/var/www/html/
+
+--Verify the Work by Executing the Playbook Using the Inventory:
+[ansible@control1]$ ansible-playbook -i 
+/home/ansible/inventory /home/ansible/web.yml
