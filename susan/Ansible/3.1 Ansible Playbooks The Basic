@@ -1,16 +1,10 @@
---Create an inventory in /home/ansible/inventory That Contains a Host Group Named web. The web Group Should Contain node1 and node2
---Use Vim to create the inventory file:
-[ansible@control1]$ echo "[web]" >> /home/ansible/inventory
-[ansible@control1]$ echo "node1" >> /home/ansible/inventory
-[ansible@control1]$ echo "node2" >> /home/ansible/inventory
-
---It should contain this when we're done:
+$ vim /home/ansible/inventory
 [web]
 node1
 node2
 
---Create a Playbook in /home/ansible/web.yml
---Using Vim, we'll create our web.yml file with these contents:
+$ vim /home/ansible/web.yml
+---
 - hosts: web
   become: yes
   tasks:
@@ -24,5 +18,5 @@ node2
       unarchive: remote_src=yes src=/tmp/website.tgz dest=/var/www/html/
 
 --Verify the Work by Executing the Playbook Using the Inventory:
-[ansible@control1]$ ansible-playbook -i 
-/home/ansible/inventory /home/ansible/web.yml
+[ansible@control1]$ ansible-playbook -i /home/ansible/inventory /home/ansible/web.yml
+$ curl node1/home.html 

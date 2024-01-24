@@ -1,0 +1,65 @@
+$ vim exports.j2
+{{ share_path }} *(rw)
+
+$vim etc.hosts.j2
+127.0.0.1	localhost {{ ansible_hostname}}
+{{ nfs_ip }}	{{ nfs_hostname }}
+
+$vim nfs.yml
+---
+- hosts: nfs
+      become: yes
+      vars:
+        share_path: /mnt/nfsroot
+      tasks:
+        - name: install nfs
+          yum:
+            name: nfs-utils
+            state: latest
+        - name: start and enable nfs-server
+          service:
+            name: nfs-server
+            state: started
+            enabled: yes
+        - name: configure exports
+          template:
+            src: /home/ansible/exports.j2
+            dest: /etc/exports
+          notify: update nfs
+      handlers:
+        - name: update nfs exports
+          command: exportfs -a
+          listen: update nfs
+    - hosts: remote
+      become: yes
+      vars:
+        nfs_ip: "{{ hostvars['nfs']['ansible_default_ipv4']['address'] }}"
+        nfs_hostname: "{{ hostvars['nfs']['ansible_hostname'] }}"
+      vars_files:
+        - /home/ansible/user-list.txt
+      tasks:
+        - name: configure hostsfile
+          template:
+            src: /home/ansible/etc.hosts.j2
+            dest: /etc/hosts
+        - name: get file status
+          stat:
+            path: /opt/user-agreement.txt
+          register: filestat
+        - name: debug info
+          debug:
+            var: filestat
+        - name: create users
+          user:
+            name: "{{ item }}"
+          when:  filestat.stat.exists
+          loop: "{{ users }}"
+
+$ ansible-playbook nfs.yml
+$ ssh nfs
+[ansible@nfs~]$ cat /etc/exports
+[ansible@nfs~]$ systemcts status nfs-server
+$ logout
+[ansible@control~]$ ssh node2
+[ansible2node2~]$ cat /etc/hosts
+[ansible2node2~]$ id judy
