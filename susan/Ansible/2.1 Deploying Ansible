@@ -1,0 +1,20 @@
+--Public IP address and password:
+ssh cloud_user@<PUBLIC IP>
+
+--Install epel-release and enter y when prompted:
+sudo yum install epel-release
+
+--Install Ansible and enter y when prompted:
+sudo yum install ansible
+
+sudo useradd ansible
+sudo passwd ansible
+logout
+
+sudo su - ansible
+ssh-keygen
+ssh-copy-id workstation
+ssh workstation
+
+--create a simple inventory
+vim /home/ansible/inventory
