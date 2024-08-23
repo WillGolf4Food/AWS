@@ -1,4 +1,4 @@
-#! C:\Users\HP\local repository\AWS\Aidan
+#! python
 
 def multiplier(num1, num2):
         
@@ -15,8 +15,17 @@ def multiplier(num1, num2):
             for ii in range(num1, 0):
                 prod = prod - num2
     return prod
-   
 
 
-result = multiplier(5,0)
-print(result)
+print("4 * 5 = {p}".format(p=multiplier(4,5)))
+print("-4 * 5 = {p}".format(p=multiplier(-4,5)))
+print("4 * -5 = {p}".format(p=multiplier(4,-5)))
+print("-4 * -5 = {p}".format(p=multiplier(-4,-5)))
+print("0 * 5 = {p}".format(p=multiplier(0,5)))
+print("4 * 0 = {p}".format(p=multiplier(4,0)))
+print("1 * 5 = {p}".format(p=multiplier(1,5)))
+print("4 * 1 = {p}".format(p=multiplier(4,1)))
+print("0 * 0 = {p}".format(p=multiplier(0,0)))
+print("1 * 1 = {p}".format(p=multiplier(1,1)))
+print("-0 * -0 = {p}".format(p=multiplier(-0,-0)))
+
